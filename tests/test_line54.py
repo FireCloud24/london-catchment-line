@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 import shapely
 
-from line54 import catchments, config, density, geo, grades, lock, rdd, sample
+from line54 import catchments, config, density, figures, geo, grades, lock, rdd, robustness, sample
 from tests.synthetic import make_sample
 
 
@@ -311,6 +311,93 @@ class TestLock(unittest.TestCase):
             lock.write_lock("tester", ["1"], prov, lk)
             prov.write_bytes(b"urn\r\n1\r\n")
             lock.require_lock(prov, lk)
+
+
+class TestRobustnessBattery(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.df = make_sample(tau=0.08, n_boundaries=12, sales_per_boundary=2500, seed=11)
+        cls.table = robustness.run_all(cls.df)
+
+    def test_every_preregistered_test_is_reported(self):
+        prefixes = {t.split()[0] for t in self.table["test"]}
+        self.assertEqual(prefixes, {f"R{i}" for i in range(1, 13)})
+        self.assertEqual((self.table["test"] == "R12 leave one boundary out").sum(), 12)
+
+    def test_placebos_and_balance_are_quiet(self):
+        quiet = self.table[self.table["test"].isin(["R1 placebo cut-off", "R2 covariate balance"])]
+        # 10 tests at 95%: allow one false alarm rather than make the test flaky.
+        misses = ((quiet["ci_low"] > 0) | (quiet["ci_high"] < 0)).sum()
+        self.assertLessEqual(misses, 1, quiet[["spec", "tau", "ci_low", "ci_high"]])
+
+    def test_stability_checks_recover_the_effect(self):
+        for name in ["R4 donut", "R8 single-boundary sales", "R9 boundary-specific slopes", "R10 extra controls", "R11 local quadratic"]:
+            for r in self.table[self.table["test"] == name].itertuples():
+                self.assertTrue(r.ci_low < 0.08 < r.ci_high, (name, r.spec, r.tau))
+
+    def test_missing_input_is_reported_not_skipped(self):
+        t = robustness.run_all(self.df.drop(columns=["dist_station_m"]))
+        row = t[t["spec"].str.contains("station")]
+        self.assertTrue(row["note"].iloc[0].startswith("not run"))
+
+    def test_timing_with_a_grade_change(self):
+        df = self.df[self.df["boundary_id"] == "B00"]
+        events = pd.DataFrame({"urn": ["B00", "B00"], "publication_date": pd.to_datetime(["2010-01-01", "2020-06-01"]),
+                               "grade": [2, 1], "inspection_number": ["a", "b"]})
+        rows = robustness.r5_timing(df, events, {"B00": ["B00"]})
+        self.assertEqual([r["spec"].split(", ")[-1] for r in rows], ["before", "after"])
+
+
+class TestAssembly(unittest.TestCase):
+    def test_opposite_sex_schools_do_not_contaminate(self):
+        compat = sample.compatibility(["Girls", "Boys", "Mixed"], sex_aware=True)
+        self.assertFalse(compat[0, 1])
+        self.assertTrue(compat[0, 2] and compat[2, 1])
+        # Sale outside girls' boundary A (-100) but inside boys' B (+300).
+        D = np.array([[-100.0, 300.0]])
+        strict = sample.assign(np.array(["s"]), D, ["A", "B"], compatible=sample.compatibility(["Girls", "Boys"], False))
+        aware = sample.assign(np.array(["s"]), D, ["A", "B"], compatible=sample.compatibility(["Girls", "Boys"], True))
+        self.assertEqual(strict["boundary_id"].tolist(), ["B"])  # A pair dropped, B kept
+        self.assertEqual(aware["boundary_id"].tolist(), ["A"])  # A valid and nearer
+
+    def test_assemble_end_to_end(self):
+        from pipeline import p06_assemble_sample
+
+        rng = np.random.default_rng(5)
+        n = 4000
+        sales = pd.DataFrame({
+            "txn_id": [f"t{i}" for i in range(n)], "price": rng.integers(200_000, 900_000, n),
+            "date": [date(2020, 6, 1)] * n, "year_quarter": "2020Q2", "postcode": [f"PC{i % 300}" for i in range(n)],
+            "property_type": rng.choice(list("DSTF"), n), "tenure": "F", "new_build": "N", "laua": "E09000001",
+            "lsoa11": "E01000001", "imd19_rank": 100, "easting": 530000 + rng.uniform(-3000, 3000, n),
+            "northing": 180000 + rng.uniform(-3000, 3000, n),
+        })
+        bs = [catchments.Boundary("A", "reconstructed_radius", 529000, 180000, 1000, {2019: 900.0, 2021: 1200.0}, None, 2, 0.1),
+              catchments.Boundary("B", "reconstructed_radius", 531500, 180000, 800, {2019: 800.0}, None, 1, None)]
+        df, log = p06_assemble_sample.assemble(sales, bs, ["Mixed", "Mixed"], np.array([[530000.0, 180000.0]]))
+        self.assertTrue(df["txn_id"].is_unique)
+        self.assertTrue((df["d_signed_m"].abs() < config.MAX_BANDWIDTH_M).all())
+        # Sold 2020-06-01: boundary A's latest offer day is 2019, radius 900.
+        a = df[df["boundary_id"] == "A"].iloc[0]
+        self.assertAlmostEqual(a["d_signed_yearly_m"], a["d_signed_m"] - 100.0, places=6)
+        self.assertIn("dist_station_m", df)
+        self.assertEqual(log.frame()["step"].iloc[0], "geolocated sales")
+
+
+class TestFigures(unittest.TestCase):
+    def test_all_figures_render(self):
+        df = make_sample(tau=0.08, n_boundaries=8, sales_per_boundary=1500, seed=21)
+        main = rdd.fit(df, 400)
+        sweep = rdd.bandwidth_sweep(df, grid=(200.0, 400.0, 600.0))
+        per = robustness.per_boundary(df)
+        with tempfile.TemporaryDirectory() as tmp:
+            t = Path(tmp)
+            figures.headline(df, main, t / "h.png")
+            figures.bandwidth(sweep, t / "b.png")
+            figures.forest(per, main, {}, t / "f.png")
+            figures.density_hist(df, t / "d.png")
+            for f in ("h.png", "b.png", "f.png", "d.png"):
+                self.assertGreater((t / f).stat().st_size, 10_000, f)
 
 
 class TestConfigMatchesPreregistration(unittest.TestCase):

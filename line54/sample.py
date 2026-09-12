@@ -44,9 +44,24 @@ def distance_matrix(e: np.ndarray, n: np.ndarray, boundaries: list[Boundary]) ->
     return np.column_stack([b.signed_distance(e, n) for b in boundaries]) if boundaries else np.empty((len(e), 0))
 
 
+def compatibility(genders: list[str], sex_aware: bool) -> np.ndarray:
+    """B x B: does being inside boundary j count as an alternative for boundary i?
+
+    Under the pre-registered rule, any other selected catchment does. With
+    sex_aware, a girls' school and a boys' school are not alternatives for each
+    other, because a place at one does nothing for a child eligible for the
+    other. Mixed schools are alternatives for everyone.
+    """
+    g = [str(x).lower() for x in genders]
+    B = len(g)
+    if not sex_aware:
+        return np.ones((B, B), dtype=bool)
+    return np.array([[not ({g[i], g[j]} == {"girls", "boys"}) for j in range(B)] for i in range(B)])
+
+
 def assign(
     txn_id: np.ndarray, D: np.ndarray, boundary_ids: list[str], max_abs_d: float = config.MAX_BANDWIDTH_M,
-    log: StepLog | None = None,
+    log: StepLog | None = None, compatible: np.ndarray | None = None,
 ) -> pd.DataFrame:
     """Apply section 5 steps 6-8 of the pre-registration.
 
@@ -56,9 +71,12 @@ def assign(
     8. Pairs further than the widest bandwidth are dropped.
     """
     N, B = D.shape
-    inside_count = (D > 0).sum(axis=1)
+    compat = np.ones((B, B), dtype=bool) if compatible is None else compatible
+    # For pair (i, a): number of boundaries j that contain sale i and count as
+    # an alternative to a. D[i, a] <= 0 means a itself never contributes.
+    alternatives = (D > 0).astype(np.int32) @ compat.T.astype(np.int32)
     within = np.abs(D) < max_abs_d
-    contaminated = (D <= 0) & (inside_count[:, None] >= 1)
+    contaminated = (D <= 0) & (alternatives >= 1)
 
     n_pairs_within = int(within.sum())
     valid = within & ~contaminated
