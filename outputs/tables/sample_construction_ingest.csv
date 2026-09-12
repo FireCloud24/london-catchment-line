@@ -1,0 +1,11 @@
+step,rows_before,rows_after,dropped,reason
+raw,11178346,11178346,0,"all rows in yearly files 2015-2025, England and Wales"
+category A,11178346,9483300,1695046,"category B: repossessions, portfolio and court-ordered transfers, non-private buyers"
+record status,9483300,9483300,0,deleted records
+property type,9483300,9483300,0,type O (other) is not a standard dwelling
+window,9483300,9483300,0,transfer date outside 2015-01-01..2025-12-31
+price floor,9483300,9483136,164,"price below GBP 10,000: data error or not a market sale"
+postcode present,9483136,9481294,1842,no postcode on the Land Registry record
+ONSPD match,9481294,9481194,100,postcode not in ONSPD (live or terminated)
+grid reference,9481194,9481194,0,ONSPD has no grid reference for the postcode
+study region,9481194,1314725,8166469,"outside the extent of London postcodes plus 5 km (E 498978-566082, N 151844-205583)"
