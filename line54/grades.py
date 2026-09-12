@@ -11,18 +11,27 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 GRADES = {"1": 1, "2": 2, "3": 3, "4": 4}
 GRADE_NAMES = {1: "Outstanding", 2: "Good", 3: "Requires improvement", 4: "Inadequate"}
 
-# (URN column, publication date column, grade column, inspection number column)
+# (role, URN, publication date, grade, inspection number, inspection start)
+# 'current' rows describe the file's own inspection. 'previous' rows are
+# back-references, and their dates are less reliable: the 2021/22 file gives
+# URN 141499's March 2020 inspection the publication date of the 2022 one.
 _EVENT_COLUMNS = [
-    ("URN", "Publication date", "Overall effectiveness", "Inspection number"),
-    ("URN at time of previous inspection", "Previous publication date", "Previous overall effectiveness", "Previous inspection number"),
-    ("URN at time of previous full inspection", "Previous publication date", "Previous full inspection overall effectiveness", "Previous full inspection number"),
-    ("URN at time of latest full inspection", "Publication date", "Overall effectiveness", "Inspection number of latest full inspection"),
-    ("URN at time of latest OEIF graded inspection", "Publication date of latest OEIF graded inspection", "Latest OEIF overall effectiveness", "Inspection number of latest OEIF graded inspection"),
+    ("current", "URN", "Publication date", "Overall effectiveness", "Inspection number", "Inspection start date"),
+    ("previous", "URN at time of previous inspection", "Previous publication date", "Previous overall effectiveness",
+     "Previous inspection number", "Previous inspection start date"),
+    ("previous", "URN at time of previous full inspection", "Previous publication date",
+     "Previous full inspection overall effectiveness", "Previous full inspection number", "Previous inspection start date"),
+    ("current", "URN at time of latest full inspection", "Publication date", "Overall effectiveness",
+     "Inspection number of latest full inspection", "Inspection start date"),
+    ("current", "URN at time of latest OEIF graded inspection", "Publication date of latest OEIF graded inspection",
+     "Latest OEIF overall effectiveness", "Inspection number of latest OEIF graded inspection",
+     "Inspection start date of latest OEIF graded inspection"),
 ]
 
 
@@ -37,7 +46,7 @@ def events_from_frame(df: pd.DataFrame, source: str) -> pd.DataFrame:
     """Every graded judgement a file mentions, whether current or 'previous'."""
     out = []
     latest_snapshot = "URN at time of latest full inspection" in df.columns
-    for urn_col, pub_col, grade_col, num_col in _EVENT_COLUMNS:
+    for role, urn_col, pub_col, grade_col, num_col, start_col in _EVENT_COLUMNS:
         # In a latest-inspections snapshot, 'URN' is the current school, not
         # the URN at the time; the explicit column is the right one there.
         if urn_col == "URN" and latest_snapshot:
@@ -50,32 +59,62 @@ def events_from_frame(df: pd.DataFrame, source: str) -> pd.DataFrame:
                 "publication_date": pd.to_datetime(df[pub_col], format="%d/%m/%Y", errors="coerce"),
                 "grade": df[grade_col].str.strip().map(GRADES),
                 "inspection_number": df[num_col].str.strip() if num_col in df.columns else pd.NA,
+                "inspection_start": pd.to_datetime(df[start_col], format="%d/%m/%Y", errors="coerce")
+                if start_col in df.columns else pd.NaT,
+                "role": role,
                 "source": source,
             }
         )
         out.append(part.dropna(subset=["urn", "publication_date", "grade"]))
+    out = [p for p in out if len(p)]
     if not out:
-        return pd.DataFrame(columns=["urn", "publication_date", "grade", "inspection_number", "source"])
+        return pd.DataFrame(columns=["urn", "publication_date", "grade", "inspection_number", "inspection_start", "role", "source"])
     ev = pd.concat(out, ignore_index=True)
     ev["grade"] = ev["grade"].astype(int)
     return ev
 
 
 def dedupe_events(ev: pd.DataFrame) -> pd.DataFrame:
-    """The same inspection appears as 'current' in one file and 'previous' in the next."""
-    ev = ev.sort_values(["urn", "publication_date", "source"])
-    dup = ev.duplicated(subset=["urn", "publication_date"], keep=False)
-    conflicts = ev[dup].groupby(["urn", "publication_date"])["grade"].nunique()
+    """One row per inspection, trusting a file's own inspection over back-references.
+
+    The same inspection appears as 'current' in one file and 'previous' in
+    later ones. When they disagree on the date, the 'current' row wins. What
+    is left after that must agree, or the function raises rather than guess.
+    """
+    ev = ev.assign(_rank=(ev["role"] != "current").astype(int)).sort_values(["_rank", "source"])
+    numbered = ev[ev["inspection_number"].notna() & (ev["inspection_number"] != "")]
+    unnumbered = ev.drop(numbered.index)
+    ev = pd.concat([numbered.drop_duplicates(subset=["inspection_number"]), unnumbered])
+    ev = ev.sort_values(["urn", "publication_date", "_rank", "source"])
+
+    # Same URN and date, different inspections: keep 'current' rows if any.
+    has_current = ev.groupby(["urn", "publication_date"])["_rank"].transform("min")
+    ev = ev[ev["_rank"] == has_current]
+    # Two reports can be published on the same day. Chislehurst School for
+    # Girls' May 2017 inspection (Inadequate) and December 2017 inspection
+    # (Good) were both published on 28 Feb 2018; the later inspection is the
+    # one in force. Only a tie on start date as well is unresolvable.
+    ev = ev.sort_values(["urn", "publication_date", "inspection_start"])
+    last = ev.groupby(["urn", "publication_date"])["inspection_start"].transform("max")
+    tied = ev[(ev["inspection_start"] == last) | last.isna()]
+    conflicts = tied.groupby(["urn", "publication_date"])["grade"].nunique()
     if (conflicts > 1).any():
         bad = conflicts[conflicts > 1].index[:5].tolist()
-        raise ValueError(f"conflicting grades for the same URN and publication date: {bad}")
-    return ev.drop_duplicates(subset=["urn", "publication_date"]).reset_index(drop=True)
+        raise ValueError(f"conflicting grades for the same URN, publication date and inspection start: {bad}")
+    return ev.drop_duplicates(subset=["urn", "publication_date"], keep="last").drop(columns="_rank").reset_index(drop=True)
 
 
-def predecessors(urn: str, links: pd.DataFrame) -> list[str]:
-    """This URN plus every predecessor, nearest first, following chains."""
+def predecessor_map(links: pd.DataFrame) -> dict[str, list[str]]:
     pred = links[links["LinkType"].str.startswith("Predecessor", na=False)]
-    by_urn = pred.groupby("URN")["LinkURN"].apply(list).to_dict()
+    return pred.groupby("URN")["LinkURN"].apply(list).to_dict()
+
+
+def predecessors(urn: str, links: pd.DataFrame | dict[str, list[str]]) -> list[str]:
+    """This URN plus every predecessor, nearest first, following chains.
+
+    Pass a prebuilt `predecessor_map` when calling this in a loop.
+    """
+    by_urn = links if isinstance(links, dict) else predecessor_map(links)
     seen, order, frontier = {urn}, [urn], [urn]
     while frontier:
         nxt = []
@@ -89,17 +128,40 @@ def predecessors(urn: str, links: pd.DataFrame) -> list[str]:
     return order
 
 
-def grade_in_force(events: pd.DataFrame, lineage: list[str], on: date) -> tuple[int | None, pd.Timestamp | None, str | None]:
+EventIndex = dict[str, tuple[np.ndarray, np.ndarray]]
+
+
+def index_events(events: pd.DataFrame) -> EventIndex:
+    """URN -> (sorted publication dates, grades), for repeated lookups."""
+    ev = events.sort_values("publication_date")
+    return {
+        urn: (g["publication_date"].to_numpy("datetime64[ns]"), g["grade"].to_numpy())
+        for urn, g in ev.groupby("urn")
+    }
+
+
+def grade_in_force(
+    events: pd.DataFrame | EventIndex, lineage: list[str], on: date
+) -> tuple[int | None, pd.Timestamp | None, str | None]:
     """Latest graded judgement published on or before `on`, across the lineage.
 
     Returns (grade, publication date, URN it was issued to). Publication date,
     not inspection date: a grade nobody has read yet cannot move a price.
+    Pass an `index_events` result when calling this in a loop.
     """
-    ev = events[events["urn"].isin(lineage) & (events["publication_date"] <= pd.Timestamp(on))]
-    if ev.empty:
+    idx = events if isinstance(events, dict) else index_events(events)
+    t = np.datetime64(pd.Timestamp(on), "ns")
+    best = None
+    for urn in lineage:
+        if urn not in idx:
+            continue
+        dates, grades_ = idx[urn]
+        k = np.searchsorted(dates, t, side="right") - 1
+        if k >= 0 and (best is None or dates[k] > best[1]):
+            best = (int(grades_[k]), dates[k], urn)
+    if best is None:
         return None, None, None
-    row = ev.sort_values("publication_date").iloc[-1]
-    return int(row["grade"]), row["publication_date"], str(row["urn"])
+    return best[0], pd.Timestamp(best[1]), best[2]
 
 
 def grade_history(events: pd.DataFrame, lineage: list[str]) -> pd.DataFrame:
