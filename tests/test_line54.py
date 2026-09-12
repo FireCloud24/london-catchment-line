@@ -179,10 +179,45 @@ class TestGrades(unittest.TestCase):
         # Grade 9 (ungraded) is not an event; the previous graded one is.
         self.assertEqual(ev[["urn", "grade"]].values.tolist(), [["299", 1]])
 
-    def test_conflicting_duplicates_raise(self):
-        ev = pd.DataFrame({"urn": ["1", "1"], "publication_date": pd.to_datetime(["2019-01-01"] * 2), "grade": [1, 2], "source": ["a", "b"]})
+    @staticmethod
+    def _ev(rows):
+        cols = ["urn", "publication_date", "grade", "inspection_number", "inspection_start", "role", "source"]
+        df = pd.DataFrame(rows, columns=cols)
+        df["publication_date"] = pd.to_datetime(df["publication_date"])
+        df["inspection_start"] = pd.to_datetime(df["inspection_start"])
+        return df
+
+    def test_current_row_beats_back_reference_date(self):
+        """URN 141499: a 2022 file copied the 2022 publication date onto the 2020 inspection."""
+        ev = self._ev([
+            ["141499", "2020-04-20", 3, "I2020", "2020-03-10", "current", "ytd_2020"],
+            ["141499", "2022-05-17", 3, "I2020", "2020-03-10", "previous", "ytd_2022"],
+            ["141499", "2022-05-17", 2, "I2022", "2022-03-29", "current", "ytd_2022"],
+        ])
+        out = grades.dedupe_events(ev)
+        self.assertEqual(out[["publication_date", "grade"]].astype(str).values.tolist(),
+                         [["2020-04-20", "3"], ["2022-05-17", "2"]])
+
+    def test_same_day_publication_later_inspection_wins(self):
+        """Chislehurst School for Girls: two reports published on 28 Feb 2018."""
+        ev = self._ev([
+            ["136467", "2018-02-28", 4, "A", "2017-05-23", "current", "f"],
+            ["136467", "2018-02-28", 2, "B", "2017-12-12", "current", "f"],
+        ])
+        self.assertEqual(grades.dedupe_events(ev)["grade"].tolist(), [2])
+
+    def test_true_conflict_raises(self):
+        ev = self._ev([
+            ["1", "2019-01-01", 1, "A", "2018-11-01", "current", "a"],
+            ["1", "2019-01-01", 2, "B", "2018-11-01", "current", "b"],
+        ])
         with self.assertRaises(ValueError):
             grades.dedupe_events(ev)
+
+    def test_index_matches_frame_lookup(self):
+        idx = grades.index_events(self.events)
+        for on in (date(2010, 1, 1), date(2016, 1, 1), date(2020, 1, 1)):
+            self.assertEqual(grades.grade_in_force(idx, ["200", "100"], on), grades.grade_in_force(self.events, ["200", "100"], on))
 
 
 class TestCatchments(unittest.TestCase):
