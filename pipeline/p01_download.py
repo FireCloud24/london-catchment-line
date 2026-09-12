@@ -5,7 +5,7 @@ each file. The manifest is how the writeup can say exactly which vintage of
 each dataset produced the headline number; the sources are all republished
 over time (Price Paid monthly, ONSPD quarterly, GIAS daily).
 
-Usage:  python -m pipeline.p01_download [--only prices|onspd|ofsted|gias]
+Usage:  python -m pipeline.p01_download [--only prices|onspd|ofsted|gias|stations]
 """
 from __future__ import annotations
 
@@ -184,7 +184,25 @@ def fetch_gias(s: requests.Session, m: dict) -> None:
         print("  unzip " + ", ".join(z.namelist()))
 
 
-STEPS = {"prices": fetch_prices, "onspd": fetch_onspd, "ofsted": fetch_ofsted, "gias": fetch_gias}
+def fetch_stations(s: requests.Session, m: dict) -> None:
+    """NaPTAN access nodes for the R2 distance-to-station balance check.
+
+    Area 910 is National Rail (including Overground and Elizabeth line
+    stations); 940 is Underground, DLR and tram. About 1.2 MB together.
+    """
+    for area in ("910", "940"):
+        url = f"https://naptan.api.dft.gov.uk/v1/access-nodes?dataFormat=csv&atcoAreaCodes={area}"
+        dest = config.RAW / "naptan" / f"naptan_{area}.csv"
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        # The API sends no Content-Length, so the size check in fetch() cannot apply.
+        with s.get(url, timeout=180) as r:
+            r.raise_for_status()
+            dest.write_bytes(r.content)
+        print(f"  get  {dest.name} ({len(r.content) / 1e6:.2f} MB)")
+        _record(m, dest, url)
+
+
+STEPS = {"prices": fetch_prices, "onspd": fetch_onspd, "ofsted": fetch_ofsted, "gias": fetch_gias, "stations": fetch_stations}
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -194,7 +212,7 @@ def main(argv: list[str] | None = None) -> None:
     session = requests.Session()
     session.headers["User-Agent"] = "the-54000-line research download (+OGL v3.0 data)"
     manifest = _load_manifest()
-    for name in args.only or ["ofsted", "gias", "onspd", "prices"]:
+    for name in args.only or ["ofsted", "gias", "onspd", "stations", "prices"]:
         print(f"[{name}]", flush=True)
         STEPS[name](session, manifest)
     print(f"manifest: {MANIFEST}")

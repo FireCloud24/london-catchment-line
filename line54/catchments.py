@@ -44,8 +44,12 @@ PROVENANCE_COLUMNS = [
 ROUTES = {"published_polygon", "reconstructed_radius", "digitised"}
 STATUSES = {"draft", "verified", "rejected"}
 
-_UNITS_TO_M = {"m": 1.0, "metres": 1.0, "meters": 1.0, "km": 1000.0, "miles": 1609.344, "mile": 1609.344}
-_PUBLISHED = re.compile(r"^\s*([\d,]*\.?\d+)\s*(m|metres|meters|km|miles|mile)\s*$", re.IGNORECASE)
+_UNITS_TO_M = {
+    "m": 1.0, "metres": 1.0, "meters": 1.0, "km": 1000.0, "kms": 1000.0,
+    "miles": 1609.344, "mile": 1609.344, "of a mile": 1609.344,
+}
+# Councils write the same number many ways: "1,254m", "1.25 kms", "0.683 of a mile".
+_PUBLISHED = re.compile(r"^\s*([\d,]*\.?\d+)\s*(m|metres|meters|kms?|miles?|of a mile)\s*$", re.IGNORECASE)
 
 
 def parse_published_distance(text: str) -> float:
