@@ -40,6 +40,14 @@ def make_sample(
         year = rng.integers(2015, 2026, len(d))
         quarter = rng.integers(1, 5, len(d))
         ptype = rng.choice(list("DSTF"), len(d), p=[0.1, 0.25, 0.35, 0.3])
+        # Covariates are smooth in d with no jump, so balance tests should pass.
+        tenure = np.where((ptype == "F") | (rng.random(len(d)) < 0.05), "L", "F")
+        new_build = np.where(rng.random(len(d)) < 0.08, "Y", "N")
+        imd_rank = np.clip(15000 + 3.0 * d + rng.normal(0, 4000, len(d)), 1, 32844)
+        dist_station = np.abs(900 + 0.2 * d + rng.normal(0, 300, len(d)))
+        # R7: yearly radius wobbles around the median, so d shifts by a year-specific amount.
+        wobble = {y: rng.normal(0, 60) for y in range(2015, 2026)}
+        d_yearly = d + np.array([wobble[y] for y in year])
         inside = d > 0
         log_price = (
             12.5
@@ -62,8 +70,19 @@ def make_sample(
                     "log_price": log_price,
                     "price": np.exp(log_price),
                     "property_type": ptype,
+                    "tenure": tenure,
+                    "new_build": new_build,
                     "year_quarter": [f"{y}Q{q}" for y, q in zip(year, quarter)],
+                    "date": [pd.Timestamp(year=y, month=3 * q - 1, day=15).date() for y, q in zip(year, quarter)],
                     "postcode": [f"P{b}-{int(x // 40)}" for x in d],  # ~40 m postcode units
+                    "imd19_rank": imd_rank,
+                    "dist_station_m": dist_station,
+                    "is_flat": (ptype == "F").astype(float),
+                    "is_detached": (ptype == "D").astype(float),
+                    "is_leasehold": (tenure == "L").astype(float),
+                    "is_new_build": (new_build == "Y").astype(float),
+                    "d_signed_yearly_m": d_yearly,
+                    "n_boundaries_within_main_h": 1,
                 }
             )
         )
