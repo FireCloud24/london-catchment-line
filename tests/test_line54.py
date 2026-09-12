@@ -225,6 +225,8 @@ class TestCatchments(unittest.TestCase):
         self.assertAlmostEqual(catchments.parse_published_distance("0.5 miles"), 804.672)
         self.assertEqual(catchments.parse_published_distance("1,254m"), 1254.0)
         self.assertEqual(catchments.parse_published_distance("1.25 km"), 1250.0)
+        self.assertEqual(catchments.parse_published_distance("1.915 kms"), 1915.0)  # RBK tables
+        self.assertAlmostEqual(catchments.parse_published_distance("0.683 of a mile"), 1099.182, places=3)  # Ealing
         with self.assertRaises(ValueError):
             catchments.parse_published_distance("about a mile")
 
@@ -263,6 +265,30 @@ class TestSampleAssembly(unittest.TestCase):
         df = pd.DataFrame({"a": [1, 2]})
         self.assertEqual(sample.frame_sha256(df), sample.frame_sha256(df.copy()))
         self.assertNotEqual(sample.frame_sha256(df), sample.frame_sha256(df.assign(a=[1, 3])))
+
+
+class TestScreenIsPriceBlind(unittest.TestCase):
+    def test_refuses_locations_file_with_prices(self):
+        from pipeline import p05_screen
+
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = Path(tmp) / "sale_locations.parquet"
+            pd.DataFrame({"txn_id": ["a"], "date": [date(2020, 1, 1)], "easting": [1.0], "northing": [1.0], "price": [1]}).to_parquet(bad)
+            original = config.INTERIM
+            try:
+                config.INTERIM = Path(tmp)
+                with self.assertRaises(RuntimeError):
+                    p05_screen.load_locations()
+            finally:
+                config.INTERIM = original
+
+    def test_counts_each_side(self):
+        from pipeline import p05_screen
+
+        b = catchments.Boundary("1", "reconstructed_radius", 0.0, 0.0, 1000.0, {2020: 1000.0}, None, 1, None)
+        locs = pd.DataFrame({"easting": [700.0, 900.0, 1100.0, 1500.0, 0.0], "northing": [0.0] * 5})
+        # d = 300, 100, -100, -500, 1000 -> inside within 400: 2; outside within 400: 1
+        self.assertEqual(p05_screen.count_sides(locs, b, 400.0), (2, 1))
 
 
 class TestLock(unittest.TestCase):

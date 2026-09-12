@@ -1,0 +1,89 @@
+urn,school_name,la_name,research_decision,c2,first_fail,all_fails,passes,n_years,radius_median_m,cv,sales_inside_400m,sales_outside_400m,fallback_step
+100190,Thomas Tallis School,Greenwich,draft_include,pass (2025-26 Greenwich community criteria),,,True,3.0,1870.0,0.102292549466175,3127.0,4131.0,0
+137531,Alexandra Park School,Haringey,draft_include,pass,,,True,4.0,816.0,0.0600334738172685,1320.0,1896.0,0
+102239,Whitmore High School,Harrow,draft_include,pass,,,True,3.0,1195.7,0.0500403191617878,1572.0,1960.0,0
+143428,Harris Academy Rainham,Havering,draft_include,"pass (2025 policy, no banding)",,,True,6.0,2556.5,0.1183938173121348,800.0,1006.0,0
+137635,Vyners School,Hillingdon,draft_include,pass (policy for entry September 2027),,,True,3.0,1661.9,0.082253261501002,1340.0,1787.0,0
+137848,Coombe Girls' School,Kingston upon Thames,draft_include,pass (2026-27 policy),,,True,5.0,1952.0,0.2250865597295802,2299.0,3343.0,0
+137060,Tolworth Girls' School and Sixth Form,Kingston upon Thames,draft_include,pass (2026-27 policy),,,True,5.0,2931.0,0.1638186109122166,3163.0,3289.0,0
+102673,Ricards Lodge High School,Merton,draft_include,pass,,,True,6.0,2902.45,0.0600581977840333,6669.0,8032.0,0
+102679,Rutlish School,Merton,draft_include,pass,,,True,6.0,2549.6,0.0645400272776646,4178.0,4237.0,0
+103103,Walthamstow School for Girls,Waltham Forest,draft_include,"pass (LBWF community criteria, 2025 booklet)",,,True,3.0,1199.0,0.0516150566247672,3655.0,3691.0,0
+101245,Robert Clack School,Barking and Dagenham,needs_manual,not checked,C2: not checked (needs_manual),C2: not checked (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+141683,The Sydney Russell School,Barking and Dagenham,needs_manual,not checked,C2: not checked (needs_manual),C2: not checked (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+136308,Ashmole Academy,Barnet,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+137645,Hendon School,Barnet,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+139594,The Archer Academy,Barnet,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+136418,The Compton School,Barnet,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+137965,Blackfen School for Girls,Bexley,excluded,,C2: not established (excluded),C2: not established (excluded) | C5: no usable cut-off figures,False,,,,,,0
+135600,Ark Academy,Brent,needs_more_years,"provisional pass (table criteria: EHCP, LAC, reserved Year 6, staff, sibling, distance); Ark banding and distance method not checked in policy","C2: provisional pass (table criteria: EHCP, LAC, reserved Year 6, staff, sibling, distance); Ark banding and distance method not checked in policy (needs_more_years)","C2: provisional pass (table criteria: EHCP, LAC, reserved Year 6, staff, sibling, distance); Ark banding and distance method not checked in policy (needs_more_years) | C5: 2 year(s) < 3",False,2.0,1689.3,0.012557392668914,1022.0,1511.0,0
+136656,Claremont High School,Brent,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+140862,Michaela Community School,Brent,needs_manual,unclear (likely fail),C2: unclear (likely fail) (needs_manual),C2: unclear (likely fail) (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+138457,Wembley High Technology College,Brent,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+136709,Bullers Wood School,Bromley,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+136467,Chislehurst School for Girls,Bromley,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+137121,Harris Academy Beckenham,Bromley,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+137379,Harris Girls Academy Bromley,Bromley,needs_manual,unclear (Harris federation schools often band),C2: unclear (Harris federation schools often band) (needs_manual),C2: unclear (Harris federation schools often band) (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+136644,Hayes School,Bromley,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+150055,Harris Academy Beulah Hill,Croydon,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+135955,Harris Academy Purley,Croydon,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+135249,Harris Academy South Norwood,Croydon,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+135311,Harris City Academy Crystal Palace,Croydon,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+140952,Harris Invictus Academy Croydon,Croydon,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+138178,Riddlesdown Collegiate,Croydon,needs_more_years,"provisional pass (2025-26 criteria: remaining places by straight line distance to the designated entrance, NLPG points)","C2: provisional pass (2025-26 criteria: remaining places by straight line distance to the designated entrance, NLPG points) (needs_more_years)","C2: provisional pass (2025-26 criteria: remaining places by straight line distance to the designated entrance, NLPG points) (needs_more_years) | C5: no usable cut-off figures",False,,,,,,0
+101941,The Ellen Wilkinson School for Girls,Ealing,excluded,,C2: not established (excluded),C2: not established (excluded) | C5: no usable cut-off figures,False,,,,,,0
+101928,Villiers High School,Ealing,excluded,,C2: not established (excluded),C2: not established (excluded) | C5: no usable cut-off figures,False,,,,,,0
+139815,Ark John Keats Academy,Enfield,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+102048,Enfield County School for Girls,Enfield,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+132256,Highlands School,Enfield,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+138449,Harris Academy Greenwich,Greenwich,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+134693,Mossbourne Community Academy,Hackney,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+135835,"The City Academy, Hackney",Hackney,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+139365,Fulham Cross Girls' School and Language College,Hammersmith and Fulham,excluded,,C2: not established (excluded),C2: not established (excluded) | C5: no usable cut-off figures,False,,,,,,0
+102157,Gladesmore Community School,Haringey,excluded,not checked,C2: not checked (excluded),C2: not checked (excluded) | C5: CV 1.032 > 0.25,False,4.0,1738.9499999999998,1.0321213380774474,1997.0,5450.0,0
+137178,Bentley Wood High School,Harrow,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+137075,Park High School,Harrow,excluded,,C2: not established (excluded),C2: not established (excluded) | C5: 1 year(s) < 3,False,1.0,1815.3,,1853.0,2885.0,0
+141071,Whitefriars School,Harrow,excluded,,C2: not established (excluded),C2: not established (excluded) | C5: 2 year(s) < 3,False,2.0,1913.5,0.3829869182240595,1922.0,3106.0,0
+137197,Hall Mead School,Havering,pending_c2,,C2: not established (pending_c2),C2: not established (pending_c2),False,8.0,2382.5,0.1331231918882631,1169.0,1100.0,0
+136711,Queensmead School,Hillingdon,pending_c2,"unclear: policy not yet read (school site had no admissions link); Hillingdon table shows a distance cut-off, not banding/faith","C2: unclear: policy not yet read (school site had no admissions link); Hillingdon table shows a distance cut-off, not banding/faith (pending_c2)","C2: unclear: policy not yet read (school site had no admissions link); Hillingdon table shows a distance cut-off, not banding/faith (pending_c2)",False,3.0,1552.1,0.0721831939920596,1441.0,2030.0,0
+137077,Rosedale College,Hillingdon,excluded,,C2: not established (excluded),C2: not established (excluded) | C5: 1 year(s) < 3,False,1.0,2543.7,,1991.0,2827.0,0
+136631,Swakeleys School for Girls,Hillingdon,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+136522,Cranford Community College,Hounslow,needs_more_years,provisional pass (allocation table criteria only),C2: provisional pass (allocation table criteria only) (needs_more_years),C2: provisional pass (allocation table criteria only) (needs_more_years) | C5: 2 year(s) < 3,False,2.0,2278.05,0.0804246469592126,2160.0,1699.0,0
+136341,Lampton Academy,Hounslow,needs_more_years,provisional pass (allocation table criteria only),C2: provisional pass (allocation table criteria only) (needs_more_years),C2: provisional pass (allocation table criteria only) (needs_more_years) | C5: 2 year(s) < 3,False,2.0,1726.85,0.1344315697736013,1570.0,1926.0,0
+138266,Reach Academy Feltham,Hounslow,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+102539,The Heathland School,Hounslow,needs_more_years,provisional pass (allocation table criteria only),C2: provisional pass (allocation table criteria only) (needs_more_years),C2: provisional pass (allocation table criteria only) (needs_more_years) | C5: 2 year(s) < 3,False,2.0,1571.5,0.0774825247981694,1999.0,2196.0,0
+100457,Elizabeth Garrett Anderson School,Islington,needs_more_years,"provisional pass (2026-27 proposed community criteria, no banding)","C2: provisional pass (2026-27 proposed community criteria, no banding) (needs_more_years)","C2: provisional pass (2026-27 proposed community criteria, no banding) (needs_more_years) | C5: no usable cut-off figures",False,,,,,,0
+100455,Highbury Fields School,Islington,needs_more_years,"provisional pass (2026-27 proposed community criteria, no banding)","C2: provisional pass (2026-27 proposed community criteria, no banding) (needs_more_years)","C2: provisional pass (2026-27 proposed community criteria, no banding) (needs_more_years) | C5: no usable cut-off figures",False,,,,,,0
+140212,Kensington Aldridge Academy,Kensington and Chelsea,needs_rule_decision,unclear,C2: unclear (needs_rule_decision),C2: unclear (needs_rule_decision) | C5: no usable cut-off figures,False,,,,,,0
+137093,Dunraven School,Lambeth,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+136450,Platanos College,Lambeth,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+135070,Haberdashers' Knights Academy,Lewisham,needs_manual,unclear,C2: unclear (needs_manual),C2: unclear (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+150319,Prendergast School,Lewisham,needs_manual,unclear,C2: unclear (needs_manual),C2: unclear (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+131897,Harris Academy Merton,Merton,needs_rule_decision,unclear,C2: unclear (needs_rule_decision),C2: unclear (needs_rule_decision) | C5: no usable cut-off figures,False,,,,,,0
+138495,Harris Academy Morden,Merton,needs_data,"provisional pass (2026-27 policy: LAC, siblings, staff, then straight line distance; no banding found)","C2: provisional pass (2026-27 policy: LAC, siblings, staff, then straight line distance; no banding found) (needs_data)","C2: provisional pass (2026-27 policy: LAC, siblings, staff, then straight line distance; no banding found) (needs_data) | C5: no usable cut-off figures",False,,,,,,0
+136669,Brampton Manor Academy,Newham,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+143274,Forest Gate Community School,Newham,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+139703,Harris Academy Chobham,Newham,excluded,provisional pass (straight line; Harris banding not checked),C2: provisional pass (straight line; Harris banding not checked) (excluded),C2: provisional pass (straight line; Harris banding not checked) (excluded) | C5: CV 0.713 > 0.25,False,3.0,941.5,0.7132088034672811,1428.0,2723.0,0
+132058,Kingsford Community School,Newham,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+102776,Little Ilford School,Newham,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+141082,Oasis Academy Silvertown,Newham,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+138196,Oasis School 21,Newham,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+148901,Rokeby School,Newham,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+140575,Beal High School,Redbridge,needs_rule_decision,unclear,C2: unclear (needs_rule_decision),C2: unclear (needs_rule_decision) | C5: no usable cut-off figures,False,,,,,,0
+136267,Chadwell Heath Academy,Redbridge,needs_rule_decision,unclear,C2: unclear (needs_rule_decision),C2: unclear (needs_rule_decision) | C5: no usable cut-off figures,False,,,,,,0
+140475,Loxford School,Redbridge,needs_rule_decision,unclear,C2: unclear (needs_rule_decision),C2: unclear (needs_rule_decision) | C5: no usable cut-off figures,False,,,,,,0
+102856,Seven Kings School,Redbridge,needs_rule_decision,unclear,C2: unclear (needs_rule_decision),C2: unclear (needs_rule_decision) | C5: no usable cut-off figures,False,,,,,,0
+138461,Waldegrave School,Richmond upon Thames,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+131747,Harris Academy Bermondsey,Southwark,needs_manual,unclear,C2: unclear (needs_manual),C2: unclear (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+136309,Kingsdale Foundation School,Southwark,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+136298,The Charter School North Dulwich,Southwark,needs_manual,unclear,C2: unclear (needs_manual),C2: unclear (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+136785,Cheam High School,Sutton,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+136914,Glenthorne High School,Sutton,needs_manual,unclear,C2: unclear (needs_manual),C2: unclear (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
+100967,Morpeth School,Tower Hamlets,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+137789,Mulberry Academy Shoreditch,Tower Hamlets,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+143629,Mulberry School for Girls,Tower Hamlets,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+143379,St Paul's Way Trust School,Tower Hamlets,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+100973,Swanlea School,Tower Hamlets,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+135316,Ashcroft Technology Academy,Wandsworth,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+137005,Graveney School,Wandsworth,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
+140985,Harris Academy Battersea,Wandsworth,excluded,not checked,C2: not checked (excluded),C2: not checked (excluded) | C5: no usable cut-off figures,False,,,,,,0
