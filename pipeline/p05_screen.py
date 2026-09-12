@@ -51,6 +51,11 @@ def screen(summary: pd.DataFrame, log: pd.DataFrame, counts: dict, rules: dict) 
         fails = []
         if not str(r.c2).startswith("pass"):
             fails.append(f"C2: {r.c2 or 'not established'} ({r.decision})")
+        # DEVIATIONS 2026-09-12: any round in which everyone was offered means
+        # no boundary existed that year, so the school fails C5 outright.
+        not_applied = str(getattr(r, "years_not_applied", "") or "").strip()
+        if not_applied:
+            fails.append(f"C5: undersubscribed in {not_applied} (no boundary that year)")
         if s.empty:
             fails.append("C5: no usable cut-off figures")
         else:

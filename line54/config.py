@@ -51,9 +51,9 @@ PROPERTY_TYPES = ("D", "S", "T", "F")
 MIN_PRICE = 10_000
 ONSPD_NO_GRID_REF = 9
 MAX_BANDWIDTH_M = 750.0
-# Pre-registered rule: any other selected catchment contaminates. Switching
-# this on (opposite-sex schools are not alternatives) needs a DEVIATIONS entry.
-SEX_AWARE_CONTAMINATION = False
+# Opposite-sex schools are not alternatives for each other when deciding
+# whether an outside sale is contaminated. See DEVIATIONS.md, 2026-09-12.
+SEX_AWARE_CONTAMINATION = True
 
 # --- Section 7: estimation ------------------------------------------------
 MAIN_BANDWIDTH_M = 400.0

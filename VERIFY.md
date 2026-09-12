@@ -73,35 +73,28 @@ reservoir, a railway yard or a park that would leave one side empty?
   from the source document text, not from summaries. That is also why it's
   worth checking them.
 
-## Decisions that are yours (all before prices, so no contamination)
+## Decisions (made 2026-09-12, before any price was related to a boundary)
 
-1. **Opposite-sex overlap.** Ricards Lodge (girls) and Rutlish (boys) have
-   overlapping circles. The pre-registered contamination rule drops a sale
-   outside boundary A if it sits inside any other selected catchment. That is
-   wrong for an opposite-sex school: a Rutlish place does not make a girl
-   eligible for Ricards Lodge. Proposed: apply contamination and
-   nearest-boundary assignment only among same-sex or mixed schools. That
-   needs a `DEVIATIONS.md` entry.
-2. **Undersubscribed years.** When a council reports "all applicants offered",
-   there was no boundary that year. At the moment such schools fail C5 through
-   too few years (Park High, Whitefriars, Rosedale, Fulham Cross, Ellen
-   Wilkinson, Villiers). Should an undersubscribed year inside the window
-   exclude a school outright, even if it has three other years?
-3. **Priority-area hybrids.** These six schools rank everyone inside a
-   published priority area first, then by distance:
-   - Redbridge ×4 (Seven Kings, Loxford, Chadwell Heath, Beal)
-   - Harris Academy Merton
-   - Kensington Aldridge Academy
+All four are recorded in `DEVIATIONS.md`.
 
-   None of the pre-registered routes fits them. Exclude, or model the boundary
-   as area ∪ distance circle?
-4. **Schools with only two years:** Heathland, Lampton, Cranford (Hounslow),
-   Ark Academy (Brent). Keep the pre-registered minimum of three, or relax it?
-   Relaxing is a deviation, but allowed because prices are unseen.
+1. **Opposite-sex schools do not contaminate each other.**
+   `SEX_AWARE_CONTAMINATION = True`.
+2. **Any undersubscribed year in the window excludes a school.** This makes
+   the **missing years** of the 10 passing schools worth checking: if, say,
+   Thomas Tallis was undersubscribed in 2024 or Whitmore in 2021, that school
+   fails C5.
+3. **Priority-area hybrids are excluded.** So are schools with separate
+   distance quotas by area (Waldegrave, Cheam High).
+4. **The minimum stays at three years.** Heathland, Lampton, Cranford and
+   Ark Academy stay out unless a third year is found.
+
+Still open, and not blocking:
+
 5. **Entrance coordinates.** Several policies measure to a named gate or
    entrance rather than the GIAS point. The main specification uses GIAS
-   points, and the error attenuates toward zero. Add a robustness run using
-   entrance coordinates you digitise, or leave this as a stated limitation?
+   points, and the error attenuates toward zero. A robustness run using
+   entrance coordinates you digitise is possible later. Otherwise it goes in
+   the writeup as a stated limitation.
 
 ## Sites I did not read (bot protection or 403, not bypassed)
 
