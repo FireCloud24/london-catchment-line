@@ -24,7 +24,7 @@ assignment rule is mechanical and the discontinuity is sharp.
 | Pre-registration (`PREREGISTRATION.md`) | Committed before any data was downloaded |
 | A. Ingestion: Price Paid, ONSPD, GIAS, Ofsted, NaPTAN | Done: 1.31M geolocated sales near London |
 | C1–C3 screen from GIAS/Ofsted | Done: 88 candidate schools |
-| B. Catchment research | **Draft**: 10 schools pass on unverified figures, see `VERIFY.md` |
+| B. Catchment research | **Draft**: 12 schools pass on unverified figures, see `VERIFY.md` |
 | Selection lock | **Waiting for human verification** |
 | C–E. Sample, estimation, robustness, figures | Built and tested on synthetic data; blocked by the lock |
 
