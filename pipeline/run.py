@@ -22,13 +22,14 @@ PHASES = [
     ("07", "pipeline.p07_estimate", None),
     ("08", "pipeline.p08_robustness", None),
     ("09", "pipeline.p09_figures", None),
+    ("10", "pipeline.p10_writeup", None),
 ]
 
 
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--from", dest="start", default="01")
-    ap.add_argument("--to", dest="end", default="09")
+    ap.add_argument("--to", dest="end", default="10")
     args = ap.parse_args(argv)
     for code, module, phase_args in PHASES:
         if not args.start <= code <= args.end:
