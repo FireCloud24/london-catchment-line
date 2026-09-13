@@ -24,6 +24,15 @@ OUTSIDE = "#8c959f"
 INSIDE = "#0b6e4f"
 
 
+def signed_pct(v: float) -> str:
+    return f"{'−' if v < 0 else '+'}{abs(v):.1f}%"
+
+
+def signed_gbp(v: float) -> str:
+    """−£16,656 rather than £-16,656."""
+    return f"{'−' if v < 0 else '+'}£{abs(v):,.0f}"
+
+
 def _style(ax) -> None:
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
@@ -79,9 +88,10 @@ def headline(df: pd.DataFrame, main: rdd.RDResult, path, h: float = config.MAIN_
 
     pct, pct_lo, pct_hi = main.pct
     pounds = main.pounds
-    headline_txt = f"Crossing the line: {pct:+.1f}% (95% CI {pct_lo:+.1f}% to {pct_hi:+.1f}%)"
+    headline_txt = f"Crossing the line: {signed_pct(pct)} (95% CI {signed_pct(pct_lo)} to {signed_pct(pct_hi)})"
     if pounds:
-        headline_txt += f"\n≈ £{pounds[0]:,.0f} at the median outside price (£{pounds[1]:,.0f} to £{pounds[2]:,.0f})"
+        headline_txt += (f"\n≈ {signed_gbp(pounds[0])} at the median outside price "
+                         f"({signed_gbp(pounds[1])} to {signed_gbp(pounds[2])})")
     ax.set_title(headline_txt, loc="left", color=INK, fontsize=11)
     ax.text(0.0, -0.2, f"{main.n_clusters} boundaries · {main.n_obs:,} sales within {h:.0f} m · triangular kernel · "
             f"SE clustered by boundary", transform=ax.transAxes, color=MUTED, fontsize=8)

@@ -1,0 +1,17 @@
+phase,step,rows_before,rows_after,dropped,reason
+A1 ingest,raw,11178346,11178346,0,"all rows in yearly files 2015-2025, England and Wales"
+A1 ingest,category A,11178346,9483300,1695046,"category B: repossessions, portfolio and court-ordered transfers, non-private buyers"
+A1 ingest,record status,9483300,9483300,0,deleted records
+A1 ingest,property type,9483300,9483300,0,type O (other) is not a standard dwelling
+A1 ingest,window,9483300,9483300,0,transfer date outside 2015-01-01..2025-12-31
+A1 ingest,price floor,9483300,9483136,164,"price below GBP 10,000: data error or not a market sale"
+A1 ingest,postcode present,9483136,9481294,1842,no postcode on the Land Registry record
+A1 ingest,ONSPD match,9481294,9481194,100,postcode not in ONSPD (live or terminated)
+A1 ingest,grid reference,9481194,9481194,0,ONSPD has no grid reference for the postcode
+A1 ingest,study region,9481194,1314725,8166469,"outside the extent of London postcodes plus 5 km (E 498978-566082, N 151844-205583)"
+C assembly,geolocated sales,1314725,1314725,0,from phase A1 (see sample_construction_ingest)
+C assembly,near a selected boundary,1314725,183218,1131507,outside every boundary's box of radius + 750 m
+C assembly,boundary 143428 not in force,183218,183218,0,sales before 2018-01-01 ignore this boundary (0 rows dropped here; pairs removed below)
+C assembly,candidate pairs,128053,128053,0,sale-boundary pairs with |d| < 750 m
+C assembly,contaminated outside,128053,123100,4953,outside this boundary but inside another selected catchment
+C assembly,nearest boundary,123100,114635,8465,"each sale kept once, against its nearest valid boundary"
