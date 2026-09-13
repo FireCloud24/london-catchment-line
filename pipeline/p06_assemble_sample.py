@@ -37,7 +37,9 @@ def load_stations() -> np.ndarray | None:
 
 
 def assemble(sales: pd.DataFrame, boundaries: list[catchments.Boundary], genders: list[str],
-             stations: np.ndarray | None, sex_aware: bool = config.SEX_AWARE_CONTAMINATION) -> tuple[pd.DataFrame, sample.StepLog]:
+             stations: np.ndarray | None, sex_aware: bool = config.SEX_AWARE_CONTAMINATION,
+             active_from: dict | None = None) -> tuple[pd.DataFrame, sample.StepLog]:
+    active_from = config.BOUNDARY_ACTIVE_FROM if active_from is None else active_from
     log = sample.StepLog()
     log.record("geolocated sales", len(sales), "from phase A1 (see sample_construction_ingest)", n_before=len(sales))
 
@@ -51,6 +53,14 @@ def assemble(sales: pd.DataFrame, boundaries: list[catchments.Boundary], genders
 
     D = sample.distance_matrix(sales["easting"].to_numpy(float), sales["northing"].to_numpy(float), boundaries)
     ids = [b.boundary_id for b in boundaries]
+    sale_dates = pd.to_datetime(sales["date"]).to_numpy()
+    for j, bid in enumerate(ids):
+        start = active_from.get(bid)
+        if start is not None:
+            # NaN distances are neither inside, outside nor within any bandwidth.
+            D[sale_dates < np.datetime64(start), j] = np.nan
+            log.record(f"boundary {bid} not in force", len(sales),
+                       f"sales before {start} ignore this boundary (0 rows dropped here; pairs removed below)")
     pairs = sample.assign(sales["txn_id"].to_numpy(), D, ids, log=log, compatible=sample.compatibility(genders, sex_aware))
 
     df = pairs.merge(sales, on="txn_id", how="left", validate="one_to_one")

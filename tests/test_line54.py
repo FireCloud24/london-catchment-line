@@ -383,6 +383,11 @@ class TestAssembly(unittest.TestCase):
         self.assertIn("dist_station_m", df)
         self.assertEqual(log.frame()["step"].iloc[0], "geolocated sales")
 
+        # A boundary not yet in force takes no pairs and contaminates nothing.
+        late, _ = p06_assemble_sample.assemble(sales, bs, ["Mixed", "Mixed"], None, active_from={"A": date(2021, 1, 1)})
+        self.assertFalse((late["boundary_id"] == "A").any())
+        self.assertGreater((late["boundary_id"] == "B").sum(), (df["boundary_id"] == "B").sum())
+
 
 class TestFigures(unittest.TestCase):
     def test_all_figures_render(self):
