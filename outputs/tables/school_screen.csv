@@ -1,14 +1,16 @@
 urn,school_name,la_name,research_decision,c2,first_fail,all_fails,passes,n_years,radius_median_m,cv,sales_inside_400m,sales_outside_400m,fallback_step
-100190,Thomas Tallis School,Greenwich,draft_include,pass (2025-26 Greenwich community criteria),,,True,3.0,1870.0,0.102292549466175,3127.0,4131.0,0
-137531,Alexandra Park School,Haringey,draft_include,pass,,,True,4.0,816.0,0.0600334738172685,1320.0,1896.0,0
-102239,Whitmore High School,Harrow,draft_include,pass,,,True,3.0,1195.7,0.0500403191617878,1572.0,1960.0,0
-143428,Harris Academy Rainham,Havering,draft_include,"pass (2025 policy, no banding)",,,True,6.0,2556.5,0.1183938173121348,800.0,1006.0,0
-137635,Vyners School,Hillingdon,draft_include,pass (policy for entry September 2027),,,True,3.0,1661.9,0.082253261501002,1340.0,1787.0,0
+100190,Thomas Tallis School,Greenwich,draft_include,pass (2025-26 Greenwich community criteria),,,True,4.0,1797.65,0.0701679652685105,2894.0,3987.0,0
+137531,Alexandra Park School,Haringey,draft_include,pass,,,True,11.0,803.2,0.1666268603578587,1310.0,1855.0,0
+102239,Whitmore High School,Harrow,draft_include,pass,,,True,10.0,1234.35,0.1721121621534886,1634.0,2013.0,0
+137197,Hall Mead School,Havering,draft_include,"pass (ELAT admissions policies 2022-23 and 2025-26, via Internet Archive)",,,True,9.0,2411.0,0.125278579596402,1258.0,1030.0,0
+143428,Harris Academy Rainham,Havering,draft_include,"pass (2025 policy, no banding)",,,True,8.0,2454.0,0.1329385180939391,807.0,913.0,0
+136711,Queensmead School,Hillingdon,draft_include,pass (2020-21 and 2022-23 policies via Internet Archive),,,True,5.0,1552.1,0.1194238254130141,1441.0,2030.0,0
+137635,Vyners School,Hillingdon,draft_include,pass (policy for entry September 2027),,,True,5.0,1673.5,0.061554146838974,1343.0,1796.0,0
 137848,Coombe Girls' School,Kingston upon Thames,draft_include,pass (2026-27 policy),,,True,5.0,1952.0,0.2250865597295802,2299.0,3343.0,0
 137060,Tolworth Girls' School and Sixth Form,Kingston upon Thames,draft_include,pass (2026-27 policy),,,True,5.0,2931.0,0.1638186109122166,3163.0,3289.0,0
 102673,Ricards Lodge High School,Merton,draft_include,pass,,,True,6.0,2902.45,0.0600581977840333,6669.0,8032.0,0
 102679,Rutlish School,Merton,draft_include,pass,,,True,6.0,2549.6,0.0645400272776646,4178.0,4237.0,0
-103103,Walthamstow School for Girls,Waltham Forest,draft_include,"pass (LBWF community criteria, 2025 booklet)",,,True,3.0,1199.0,0.0516150566247672,3655.0,3691.0,0
+103103,Walthamstow School for Girls,Waltham Forest,draft_include,"pass (LBWF community criteria, 2025 booklet)",,,True,6.0,1235.15,0.0646128937520437,3758.0,3828.0,0
 101245,Robert Clack School,Barking and Dagenham,needs_manual,not checked,C2: not checked (needs_manual),C2: not checked (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
 141683,The Sydney Russell School,Barking and Dagenham,needs_manual,not checked,C2: not checked (needs_manual),C2: not checked (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
 136308,Ashmole Academy,Barnet,needs_manual,,C2: not established (needs_manual),C2: not established (needs_manual) | C5: no usable cut-off figures,False,,,,,,0
@@ -44,8 +46,6 @@ urn,school_name,la_name,research_decision,c2,first_fail,all_fails,passes,n_years
 137178,Bentley Wood High School,Harrow,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
 137075,Park High School,Harrow,excluded,,C2: not established (excluded),"C2: not established (excluded) | C5: undersubscribed in 2024,2025 (no boundary that year) | C5: 1 year(s) < 3",False,1.0,1815.3,,1853.0,2885.0,0
 141071,Whitefriars School,Harrow,excluded,,C2: not established (excluded),C2: not established (excluded) | C5: undersubscribed in 2025 (no boundary that year) | C5: 2 year(s) < 3,False,2.0,1913.5,0.3829869182240595,1922.0,3106.0,0
-137197,Hall Mead School,Havering,pending_c2,,C2: not established (pending_c2),C2: not established (pending_c2),False,8.0,2382.5,0.1331231918882631,1169.0,1100.0,0
-136711,Queensmead School,Hillingdon,pending_c2,"unclear: policy not yet read (school site had no admissions link); Hillingdon table shows a distance cut-off, not banding/faith","C2: unclear: policy not yet read (school site had no admissions link); Hillingdon table shows a distance cut-off, not banding/faith (pending_c2)","C2: unclear: policy not yet read (school site had no admissions link); Hillingdon table shows a distance cut-off, not banding/faith (pending_c2)",False,3.0,1552.1,0.0721831939920596,1441.0,2030.0,0
 137077,Rosedale College,Hillingdon,excluded,,C2: not established (excluded),"C2: not established (excluded) | C5: undersubscribed in 2022,2023 (no boundary that year) | C5: 1 year(s) < 3",False,1.0,2543.7,,1991.0,2827.0,0
 136631,Swakeleys School for Girls,Hillingdon,excluded,fail,C2: fail (excluded),C2: fail (excluded) | C5: no usable cut-off figures,False,,,,,,0
 136522,Cranford Community College,Hounslow,needs_more_years,provisional pass (allocation table criteria only),C2: provisional pass (allocation table criteria only) (needs_more_years),C2: provisional pass (allocation table criteria only) (needs_more_years) | C5: 2 year(s) < 3,False,2.0,2278.05,0.0804246469592126,2160.0,1699.0,0
