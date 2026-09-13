@@ -54,6 +54,11 @@ MAX_BANDWIDTH_M = 750.0
 # Opposite-sex schools are not alternatives for each other when deciding
 # whether an outside sale is contaminated. See DEVIATIONS.md, 2026-09-12.
 SEX_AWARE_CONTAMINATION = True
+# A boundary that did not exist as a distance rule for part of the window is
+# treated as absent for sales before this date: no pairs, no contamination.
+# Harris Academy Rainham gave 91 of 195 places to partner-school applicants in
+# the 2017 round. See DEVIATIONS.md, 2026-09-13.
+BOUNDARY_ACTIVE_FROM = {"143428": date(2018, 1, 1)}
 
 # --- Section 7: estimation ------------------------------------------------
 MAIN_BANDWIDTH_M = 400.0
