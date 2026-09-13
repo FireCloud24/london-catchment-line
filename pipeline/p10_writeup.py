@@ -33,12 +33,15 @@ def e(s: object) -> str:
     return html.escape(str(s))
 
 
+WJ = "⁠"  # word joiner: a line must never break between a sign and its number
+
+
 def pct(v: float, dp: int = 1) -> str:
-    return f"{'−' if v < 0 else '+'}{abs(v):.{dp}f}%"
+    return f"{'−' if v < 0 else '+'}{WJ}{abs(v):.{dp}f}%"
 
 
 def gbp(v: float, k: bool = False) -> str:
-    sign = "−" if v < 0 else "+"
+    sign = ("−" if v < 0 else "+") + WJ
     if k:
         return f"{sign}£{abs(v) / 1000:,.1f}k"
     return f"{sign}£{abs(v):,.0f}"
@@ -77,7 +80,8 @@ def hero_interval(main: dict) -> str:
         f'<text class="tick" x="{x(t):.1f}" y="98" text-anchor="middle">{pct(t, 0) if t else "0"}</text>'
         for t in (-5, 0, 5, 10)
     )
-    pl, pm, ph = main["pounds"]
+    # pounds is ordered like pct: (estimate, low, high).
+    _, pl, ph = main["pounds"]
     return f"""<svg class="chart hero-svg" viewBox="0 0 {W} {H}" role="img"
   aria-label="95% interval from {pct(lo)} to {pct(hi)}, estimate {pct(mid)}, crossing zero">
   {ticks}
