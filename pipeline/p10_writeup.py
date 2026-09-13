@@ -1,9 +1,12 @@
 """Phase E2: the writeup, generated from stored results so no number is retyped.
 
 Charts are inline SVG styled by the page's theme tokens, so they read in light
-and dark and cannot drift from outputs/results. Writes writeup/index.html.
+and dark and cannot drift from outputs/results. Writes docs/index.html, which
+GitHub Pages serves as the project site.
 
-Usage:  python -m pipeline.p10_writeup
+Usage:  python -m pipeline.p10_writeup [--body-only PATH]
+  --body-only writes a second copy without <html>/<head> wrappers, for hosts
+  that supply their own document skeleton.
 """
 from __future__ import annotations
 
@@ -19,7 +22,8 @@ import pandas as pd
 from line54 import config, figures, rdd
 from pipeline.p07_estimate import RESULTS, load_sample
 
-OUT_DIR = config.ROOT / "writeup"
+OUT_DIR = config.ROOT / "docs"
+REPO_URL = "https://github.com/FireCloud24/london-catchment-line"
 GRADE = {1: "Outstanding", 2: "Good", 3: "Requires improvement", 4: "Inadequate"}
 
 
@@ -443,7 +447,7 @@ code {{ font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-si
   <div class="hero">{hero_interval(main_r)}</div>
   <p class="meta"><span><b>{num(main_r['n_obs'])}</b> sales within 400 m</span><span><b>12</b> boundaries, {num(radius_lo)}–{num(radius_hi)} m radius</span>
   <span>clustered <i>t</i>({main_r['df_inference']}) <b>p = {pval(main_r['p_value'])}</b></span><span>wild cluster bootstrap <b>p = {pval(main_r['p_wild_bootstrap'])}</b></span>
-  <span>selection locked before prices were read</span></p>
+  <span>selection locked before prices were read</span><span><a href="{REPO_URL}">code, data sources and pre-registration</a></span></p>
 </header>
 
 <figure>
@@ -542,7 +546,7 @@ from 2018, because its 2017 round gave priority to partner-school applicants.</p
 <p class="note col">Cut-offs were transcribed from council allocation tables, booklets and spreadsheets, some through Internet Archive copies
 of files councils have since removed. Of the {len(detail)} school-year figures used, {sum(1 for d in detail if '>script<' in d)} were confirmed by an automated re-read of the source (value on
 the school's own row, correct entry year) and {sum(1 for d in detail if '>individual<' in d)} were checked individually (image-only PDFs re-read from enlarged scans, one split-column
-table re-aligned). The author approved the set without re-reading every source; <code>DEVIATIONS.md</code> records how it was checked. {len(rejected)} figures were
+table re-aligned). The author approved the set without re-reading every source; <a href="{REPO_URL}/blob/main/DEVIATIONS.md"><code>DEVIATIONS.md</code></a> records how it was checked. {len(rejected)} figures were
 rejected, including Merton's 2025 rows, which repeat 2024 to the penny.</p>
 <details><summary>All {len(detail)} cut-off figures and their sources</summary>
 <div class="table-wrap"><table>
@@ -596,8 +600,8 @@ within the same 45° arc of each circle. Per-boundary balance tables are in <cod
   <li>The deprivation balance check uses the IMD 2019 rank that ONS publishes with postcodes, not the score.</li>
   <li>Boundary figures were re-checked by script and individually rather than read row by row by the author.</li>
 </ul>
-<p class="note col">Each change is dated in <code>DEVIATIONS.md</code> with whether prices had been examined; none had. Reproduce everything from public
-downloads with <code>python -m pipeline.run</code>. Sample hash <code>{meta['sha256'][:16]}</code>.</p>
+<p class="note col">Each change is dated in <a href="{REPO_URL}/blob/main/DEVIATIONS.md"><code>DEVIATIONS.md</code></a> with whether prices had been examined; none had. Reproduce everything from public
+downloads with <code>python -m pipeline.run</code> from the <a href="{REPO_URL}">code repository</a>. Sample hash <code>{meta['sha256'][:16]}</code>.</p>
 
 <h3>Data</h3>
 <p class="note col">Contains HM Land Registry data © Crown copyright and database right 2021, licensed under the Open Government Licence v3.0.
@@ -611,7 +615,9 @@ Council admissions documents are cited per figure in A1.</p>
     (OUT_DIR / "index.html").write_text("<!doctype html>\n<html lang=\"en-GB\"><head><meta charset=\"utf-8\">"
                                         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
                                         + page.replace("<main", "</head><body>\n<main", 1) + "</body></html>\n", encoding="utf-8")
-    (OUT_DIR / "artifact.html").write_text(page, encoding="utf-8")
+    (OUT_DIR / ".nojekyll").write_text("", encoding="utf-8")
+    if "--body-only" in sys.argv:
+        Path(sys.argv[sys.argv.index("--body-only") + 1]).write_text(page, encoding="utf-8")
     prose = re.sub(r"<[^>]+>", " ", page.split('<section class="appendix">')[0].split("</style>")[1])
     prose = re.sub(r"<svg.*?</svg>", " ", prose, flags=re.S)
     print(f"writeup -> {OUT_DIR / 'index.html'}; main text about {len(re.findall(r'[A-Za-z£%0-9]+', prose))} words")

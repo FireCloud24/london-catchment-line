@@ -9,7 +9,7 @@ inside the admissions line sold for an estimated **+1.8%** more than one just
 outside (**+£8,821** at the median outside price of £480,000). The 95%
 interval runs from −3.5% to +7.4% (−£16,656 to +£35,698), so the premium
 cannot be told apart from zero. Large premiums are ruled out; a small one is
-possible but not established. Read the full writeup in `writeup/index.html`.
+possible but not established. **[Read the full writeup](https://firecloud24.github.io/london-catchment-line/)** (source: `docs/index.html`).
 
 The working title was "The £54,000 Line". The number was left blank until the
 pre-registered specification produced it.
@@ -66,7 +66,7 @@ Every phase writes an artefact to disk. Nothing depends on notebook state.
 | 07 | `p07_estimate` | `outputs/results/main.json`, bandwidth sweep, per-boundary estimates |
 | 08 | `p08_robustness` | `outputs/results/robustness.csv` (R1–R12) |
 | 09 | `p09_figures` | headline chart, bandwidth plot, forest plot, density histogram (PNG) |
-| 10 | `p10_writeup` | `writeup/index.html`, charts as inline SVG generated from the stored results |
+| 10 | `p10_writeup` | `docs/index.html` (the GitHub Pages site), charts as inline SVG generated from the stored results |
 
 ## Repository map
 
@@ -74,7 +74,7 @@ Every phase writes an artefact to disk. Nothing depends on notebook state.
 PREREGISTRATION.md   selection rules and analysis plan, committed first
 DEVIATIONS.md        every change to the plan, dated, with whether prices had been seen
 VERIFY.md            how the catchment research was checked before locking
-writeup/             the deliverable: one page, one number, full appendix
+docs/                the deliverable: one page, one number, full appendix (served by GitHub Pages)
 catchments/          provenance.csv (school-year cut-offs), research_log.csv (all 88 candidates)
 line54/              library: geometry, RD estimator, density test, grades, robustness, figures
 pipeline/            one script per phase
@@ -98,7 +98,10 @@ outputs/             tables, figures, results (data/ is not committed)
 - **Source errors.** Two Ofsted records, one duplicated council table and one
   wrong search summary were caught and are documented in code or `VERIFY.md`.
 
-## Data and licences
+## Licences
+
+The code and the writing in this repository are released under the MIT
+licence (`LICENSE`). Data and derived outputs keep their original licences:
 
 - Contains HM Land Registry data © Crown copyright and database right 2021.
   This data is licensed under the Open Government Licence v3.0.
