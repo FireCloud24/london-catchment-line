@@ -32,7 +32,7 @@ assignment rule is mechanical and the discontinuity is sharp.
 | A. Ingestion: Price Paid, ONSPD, GIAS, Ofsted, NaPTAN | Done: 1.31M geolocated sales near London |
 | C1–C3 screen from GIAS/Ofsted | Done: 88 candidate schools |
 | B. Catchment research | Done: 12 schools, 80 cut-off figures re-checked against sources |
-| Selection lock | Committed 2026-09-13, before any price was read (`2f24764`) |
+| Selection lock | Committed 2026-09-13, before any price was read (`f123bcc`) |
 | C–E. Sample, estimation, robustness, figures, writeup | Done: 114,635 sales in sample; all 12 robustness checks reported |
 
 ## Reproduce
