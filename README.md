@@ -1,11 +1,18 @@
-# The £___ Line
+# What a London catchment line is worth
 
 What a secondary-school catchment boundary is worth, measured where the map
 changes and the neighbourhood does not. This is a regression discontinuity
 study of London house prices at school admission boundaries.
 
-The number in the title is blank on purpose. It is whatever the
-pre-registered main specification produces, including zero.
+**Result.** Across twelve oversubscribed London secondaries, a home just
+inside the admissions line sold for an estimated **+1.8%** more than one just
+outside (**+£8,821** at the median outside price of £480,000). The 95%
+interval runs from −3.5% to +7.4% (−£16,656 to +£35,698), so the premium
+cannot be told apart from zero. Large premiums are ruled out; a small one is
+possible but not established. Read the full writeup in `writeup/index.html`.
+
+The working title was "The £54,000 Line". The number was left blank until the
+pre-registered specification produced it.
 
 ## The design in one paragraph
 
@@ -24,9 +31,9 @@ assignment rule is mechanical and the discontinuity is sharp.
 | Pre-registration (`PREREGISTRATION.md`) | Committed before any data was downloaded |
 | A. Ingestion: Price Paid, ONSPD, GIAS, Ofsted, NaPTAN | Done: 1.31M geolocated sales near London |
 | C1–C3 screen from GIAS/Ofsted | Done: 88 candidate schools |
-| B. Catchment research | **Draft**: 12 schools pass on unverified figures, see `VERIFY.md` |
-| Selection lock | **Waiting for human verification** |
-| C–E. Sample, estimation, robustness, figures | Built and tested on synthetic data; blocked by the lock |
+| B. Catchment research | Done: 12 schools, 80 cut-off figures re-checked against sources |
+| Selection lock | Committed 2026-09-13, before any price was read (`2f24764`) |
+| C–E. Sample, estimation, robustness, figures, writeup | Done: 114,635 sales in sample; all 12 robustness checks reported |
 
 ## Reproduce
 
@@ -35,7 +42,7 @@ Python 3.12, from the repository root:
 ```
 pip install -r requirements.txt
 python -m unittest discover -s tests -t .     # 45 tests, synthetic data only
-python -m pipeline.run                        # downloads (~2.4 GB) through to figures
+python -m pipeline.run                        # downloads (~2.4 GB) through to the writeup
 ```
 
 `pipeline.run` stops at phase 06 until `catchments/selection_lock.json`
@@ -58,14 +65,16 @@ Every phase writes an artefact to disk. Nothing depends on notebook state.
 | 06 | `p06_assemble_sample` | `rdd_sample.parquet` + hash, full sample construction table |
 | 07 | `p07_estimate` | `outputs/results/main.json`, bandwidth sweep, per-boundary estimates |
 | 08 | `p08_robustness` | `outputs/results/robustness.csv` (R1–R12) |
-| 09 | `p09_figures` | headline chart, bandwidth plot, forest plot, density histogram |
+| 09 | `p09_figures` | headline chart, bandwidth plot, forest plot, density histogram (PNG) |
+| 10 | `p10_writeup` | `writeup/index.html`, charts as inline SVG generated from the stored results |
 
 ## Repository map
 
 ```
 PREREGISTRATION.md   selection rules and analysis plan, committed first
 DEVIATIONS.md        every change to the plan, dated, with whether prices had been seen
-VERIFY.md            how to check the catchment research before locking
+VERIFY.md            how the catchment research was checked before locking
+writeup/             the deliverable: one page, one number, full appendix
 catchments/          provenance.csv (school-year cut-offs), research_log.csv (all 88 candidates)
 line54/              library: geometry, RD estimator, density test, grades, robustness, figures
 pipeline/            one script per phase
