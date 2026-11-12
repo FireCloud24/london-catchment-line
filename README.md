@@ -16,6 +16,11 @@ interval runs from −3.5% to +7.4% (−£16,656 to +£35,698), so the premium
 cannot be told apart from zero. Large premiums are ruled out; a small one is
 possible but not established. **[Read the full writeup](https://firecloud24.github.io/london-catchment-line/)** (source: `docs/index.html`).
 
+![Adjusted sale price against distance to the catchment boundary, with a small jump at the line](outputs/figures/headline.png)
+
+*Each dot is a 25 m bin of sales; the lines are the local linear fits either
+side of the boundary, with 95% bands. Written by `pipeline.p09_figures`.*
+
 The working title was "The £54,000 Line". The number was left blank until the
 pre-registered specification produced it.
 
