@@ -480,7 +480,7 @@ street, a bus stop and a postcode sector. Only one carries the expectation of a 
 criteria; places ranked by straight-line distance with no banding, feeder schools or lottery; rated better than the three nearest alternatives;
 at least three years of published cut-offs that varied little; and enough sales on both sides. Of {n_candidates} London secondary school records screened,
 {n_c3} cleared the type, faith and quality rules, and twelve cleared the rest. Each boundary is the circle at the school's median cut-off.
-The choice of schools was locked, and the lock committed, before the first price was read.</p>
+The choice of schools was locked, and the lock committed, before the first price was examined.</p>
 <p>The estimate compares sales within 400 metres of each line, weighting nearer sales more, with a straight-line fit on each side and
 allowances for property type, quarter and boundary. Uncertainty is measured across boundaries, not sales, and with only twelve boundaries a
 bootstrap built for few clusters is reported as well. What this measures is the price of <em>advertised</em> eligibility: living inside the

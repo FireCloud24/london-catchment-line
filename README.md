@@ -9,7 +9,7 @@ study of London house prices at school admission boundaries.
 > **Skills shown**
 > - **Regression discontinuity:** local linear estimation, bandwidth sensitivity, density test, wild cluster bootstrap for few clusters.
 > - **Geospatial data engineering:** 1.31M geolocated sales, catchment boundaries reconstructed in British National Grid metres, a ten-phase pipeline with hashed artefacts.
-> - **Pre-registration:** selection rules and analysis plan committed before any data; boundaries locked before any price was read; every deviation logged.
+> - **Pre-registration:** selection rules and analysis plan committed before any data; boundaries locked before any price was examined; every deviation logged.
 
 **Result.** Across twelve oversubscribed London secondaries, a home just
 inside the admissions line sold for an estimated **+1.8%** more than one just
@@ -44,7 +44,7 @@ assignment rule is mechanical and the discontinuity is sharp.
 | A. Ingestion: Price Paid, ONSPD, GIAS, Ofsted, NaPTAN | Done: 1.31M geolocated sales near London |
 | C1–C3 screen from GIAS/Ofsted | Done: 88 candidate schools |
 | B. Catchment research | Done: 12 schools, 80 cut-off figures re-checked against sources |
-| Selection lock | Committed 2026-09-13, before any price was read (`e02187a`) |
+| Selection lock | Committed 2026-09-13, before any price was examined (`e02187a`, originally `f123bcc`; see `DEVIATIONS.md`, 2026-11-12) |
 | C–E. Sample, estimation, robustness, figures, writeup | Done: 114,635 sales in sample; all 12 robustness checks reported |
 
 ## Reproduce

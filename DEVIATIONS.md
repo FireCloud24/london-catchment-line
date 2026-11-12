@@ -133,8 +133,9 @@ their rewritten equivalents:
 
 Nothing else in those files was touched, and no phase of the pipeline was
 re-run. File contents, author, commit dates and commit order are unchanged:
-the tree at the last commit before the rewrite and at its rewritten
-equivalent is the same object (`0ab3554`).
+the tree at the last rewritten commit (`dcdb800`, "P3: Run the tests on
+every push") and at its rewritten equivalent (`93aa617`) is the same object
+(`0ab3554`).
 
 This is the second rewrite. The first, on 2026-09-13 before publishing,
 changed the author name and email (`2f24764` became `f123bcc`, `0526a65`
@@ -159,12 +160,31 @@ Old to new, oldest first:
 | `cdefa94` | `0bc8fb0` | Update commit hash references after author rewrite |
 | `7d1b307` | `c4be90c` | Add MIT licence and serve the writeup with GitHub Pages |
 | `648d99f` | `22d24f3` | Fix the writeup's interval labels and sign wrapping |
+| `3864aaf` | `870bc17` | P1: Add a skills box to the README |
+| `170321e` | `5fbb125` | P2: Show the headline figure in the README |
+| `dcdb800` | `93aa617` | P3: Run the tests on every push |
 
 **Why.** The author's decision about how the repository presents authorship.
 It has a cost, stated here so a reader can weigh it: the hashes that tie the
-selection lock to a point before any price was read are now ones the author
+selection lock to a point before any price was examined are now ones the author
 edited after the fact, twice. The ordering evidence that remains is the
 commit dates and the order of the commits, which a rewrite could also have
 changed. Anyone holding a clone made before 2026-11-12 can compare.
+
+**Prices examined?** Not applicable. No analysis was run or changed.
+
+### 2026-11-12: Wording: "before any price was examined"
+
+**Change.** The README and the writeup said the boundary set was locked
+"before any price was read". They now say "examined". The sentence in the
+writeup was edited by hand in `docs/index.html` and in its generator
+(`pipeline/p10_writeup.py`); the writeup was not regenerated.
+
+**Why.** Ingestion (phase 02) ran before the lock and applied a mechanical
+price floor: sales below GBP 10,000 are dropped as data errors
+(`config.MIN_PRICE`). So prices were read by code before the lock. What the
+lock guarantees is that no price was looked at or related to a boundary
+before the boundary set was fixed. Earlier entries in this file are left as
+written.
 
 **Prices examined?** Not applicable. No analysis was run or changed.
