@@ -4,6 +4,11 @@ What a secondary-school catchment boundary is worth, measured where the map
 changes and the neighbourhood does not. This is a regression discontinuity
 study of London house prices at school admission boundaries.
 
+> **Skills shown**
+> - **Regression discontinuity:** local linear estimation, bandwidth sensitivity, density test, wild cluster bootstrap for few clusters.
+> - **Geospatial data engineering:** 1.31M geolocated sales, catchment boundaries reconstructed in British National Grid metres, a ten-phase pipeline with hashed artefacts.
+> - **Pre-registration:** selection rules and analysis plan committed before any data; boundaries locked before any price was read; every deviation logged.
+
 **Result.** Across twelve oversubscribed London secondaries, a home just
 inside the admissions line sold for an estimated **+1.8%** more than one just
 outside (**+£8,821** at the median outside price of £480,000). The 95%
