@@ -116,3 +116,55 @@ This was the recommended option; the author asked for the project to continue
 without choosing.
 
 **Prices examined?** No.
+
+### 2026-11-12: Commit messages rewritten; recorded commit hashes updated
+
+**Change.** Every commit message in this repository ended with a
+`Co-Authored-By` trailer added by an AI coding assistant. On 2026-11-12 the
+history was rewritten to remove that line. A commit's hash depends on its
+message, so every hash changed. Three recorded hashes were updated by hand to
+their rewritten equivalents:
+
+| Where | Old | New |
+|---|---|---|
+| `README.md`, selection lock row | `f123bcc` | `e02187a` |
+| `outputs/results/main.json`, `git_head` | `f123bcc` | `e02187a` |
+| `catchments/selection_lock.json`, `git_head_at_lock` | `6cc4cbc` | `3bb7929` |
+
+Nothing else in those files was touched, and no phase of the pipeline was
+re-run. File contents, author, commit dates and commit order are unchanged:
+the tree at the last commit before the rewrite and at its rewritten
+equivalent is the same object (`0ab3554`).
+
+This is the second rewrite. The first, on 2026-09-13 before publishing,
+changed the author name and email (`2f24764` became `f123bcc`, `0526a65`
+became `6cc4cbc`); the commit "Update commit hash references after author
+rewrite" records it, and its message still shows the hashes of that time.
+
+Old to new, oldest first:
+
+| Old | New | Commit |
+|---|---|---|
+| `f78ce5c` | `612bcbd` | Pre-register selection rules and analysis plan |
+| `c56ed54` | `546d946` | Add analysis library, download script and synthetic-data tests |
+| `5adfab5` | `5339402` | Ingest sales and schools; screen London secondaries on C1-C3 |
+| `f89f55a` | `1cb9f20` | Test grade dedupe against the two real Ofsted cases |
+| `5ac93aa` | `1ebd8c3` | Draft catchment research and price-blind screen |
+| `824657e` | `9b1cfb7` | Build sample assembly, estimation, robustness and figures behind the lock |
+| `127c1de` | `572fc1d` | Apply author decisions on contamination, undersubscription and hybrids |
+| `6cc4cbc` | `3bb7929` | Fill missing cut-off years from the Internet Archive |
+| `f123bcc` | `e02187a` | Lock the verified boundary set (12 schools) before any price is used |
+| `ec089fa` | `411c6df` | Run the pre-registered analysis on the locked sample |
+| `5c3c2e2` | `8990a6f` | Add the writeup, generated from stored results |
+| `cdefa94` | `0bc8fb0` | Update commit hash references after author rewrite |
+| `7d1b307` | `c4be90c` | Add MIT licence and serve the writeup with GitHub Pages |
+| `648d99f` | `22d24f3` | Fix the writeup's interval labels and sign wrapping |
+
+**Why.** The author's decision about how the repository presents authorship.
+It has a cost, stated here so a reader can weigh it: the hashes that tie the
+selection lock to a point before any price was read are now ones the author
+edited after the fact, twice. The ordering evidence that remains is the
+commit dates and the order of the commits, which a rewrite could also have
+changed. Anyone holding a clone made before 2026-11-12 can compare.
+
+**Prices examined?** Not applicable. No analysis was run or changed.
