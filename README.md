@@ -1,5 +1,7 @@
 # What a London catchment line is worth
 
+[![tests](https://github.com/FireCloud24/london-catchment-line/actions/workflows/tests.yml/badge.svg)](https://github.com/FireCloud24/london-catchment-line/actions/workflows/tests.yml)
+
 What a secondary-school catchment boundary is worth, measured where the map
 changes and the neighbourhood does not. This is a regression discontinuity
 study of London house prices at school admission boundaries.
