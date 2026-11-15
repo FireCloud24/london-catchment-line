@@ -2,52 +2,115 @@
 
 [![tests](https://github.com/FireCloud24/london-catchment-line/actions/workflows/tests.yml/badge.svg)](https://github.com/FireCloud24/london-catchment-line/actions/workflows/tests.yml)
 
-What a secondary-school catchment boundary is worth, measured where the map
-changes and the neighbourhood does not. This is a regression discontinuity
-study of London house prices at school admission boundaries.
+I measured what a secondary school's catchment boundary adds to London house prices, by
+comparing homes a few metres either side of the line.
 
-> **Skills shown**
-> - **Regression discontinuity:** local linear estimation, bandwidth sensitivity, density test, wild cluster bootstrap for few clusters.
-> - **Geospatial data engineering:** 1.31M geolocated sales, catchment boundaries reconstructed in British National Grid metres, a ten-phase pipeline with hashed artefacts.
-> - **Pre-registration:** selection rules and analysis plan committed before any data; boundaries locked before any price was examined; every deviation logged.
+## Why I cared
 
-**Result.** Across twelve oversubscribed London secondaries, a home just
-inside the admissions line sold for an estimated **+1.8%** more than one just
-outside (**+£8,821** at the median outside price of £480,000). The 95%
-interval runs from −3.5% to +7.4% (−£16,656 to +£35,698), so the premium
-cannot be told apart from zero. Large premiums are ruled out; a small one is
-possible but not established. **[Read the full writeup](https://firecloud24.github.io/london-catchment-line/)** (source: `docs/index.html`).
+In London, a good school catchment is talked about as if it came with a price tag, and the
+numbers people quote are large. Most of those numbers compare whole neighbourhoods, so they
+also measure everything else that differs between them. I wanted to know what the line itself
+is worth when the houses on both sides share the same streets.
+
+## What I found
+
+Across twelve oversubscribed London secondaries, a home just inside the admissions line sold
+for about **+1.8%** more than one just outside: **+£8,821** at the median outside price of
+£480,000. The 95% interval runs from −3.5% to +7.4% (−£16,656 to +£35,698), so I can't tell
+the premium apart from zero. Large premiums are ruled out. A small one is possible, but this
+study doesn't establish it.
 
 ![Adjusted sale price against distance to the catchment boundary, with a small jump at the line](outputs/figures/headline.png)
 
-*Each dot is a 25 m bin of sales; the lines are the local linear fits either
-side of the boundary, with 95% bands. Written by `pipeline.p09_figures`.*
+*Each dot is a 25 m band of sales. The lines are local linear fits on each side of the
+boundary, with 95% bands.*
 
-The working title was "The £54,000 Line". The number was left blank until the
-pre-registered specification produced it.
+My working title was "The £54,000 Line". I left the number blank until the pre-registered
+analysis produced one. The full write-up, with every check, is at
+**[firecloud24.github.io/london-catchment-line](https://firecloud24.github.io/london-catchment-line/)**.
 
-## The design in one paragraph
+## Why not just regress price on school quality
 
-Regressing price on school quality mostly measures where wealthy families
-already live. This project compares sales a few metres either side of a
-catchment boundary. Those houses share streets, transport and neighbours;
-only admission eligibility jumps. The boundaries aren't published anywhere,
-so they are reconstructed from each council's "last distance offered" figures,
-only for schools that admit on straight-line distance. For those schools the
-assignment rule is mechanical and the discontinuity is sharp.
+That analysis almost always finds a big premium, and it is almost always measuring something
+else. Good schools sit where families with money already live, and those families pay for
+gardens, quiet streets and shops as well as schools. Controls only remove what someone thought
+to measure.
 
-## Status
+So there were two ways to read the premium people quote: the school, or the neighbourhood that
+comes with it. Comparing sales a few metres either side of a boundary takes the neighbourhood
+away. Those houses share streets, bus stops and postcode sectors. Only admission eligibility
+changes.
 
-| Phase | State |
-|---|---|
-| Pre-registration (`PREREGISTRATION.md`) | Committed before any data was downloaded |
-| A. Ingestion: Price Paid, ONSPD, GIAS, Ofsted, NaPTAN | Done: 1.31M geolocated sales near London |
-| C1–C3 screen from GIAS/Ofsted | Done: 88 candidate schools |
-| B. Catchment research | Done: 12 schools, 80 cut-off figures re-checked against sources |
-| Selection lock | Committed 2026-09-13, before any price was examined (`e02187a`, originally `f123bcc`; see `DEVIATIONS.md`, 2026-11-12) |
-| C–E. Sample, estimation, robustness, figures, writeup | Done: 114,635 sales in sample; all 12 robustness checks reported |
+## How I tested it
 
-## Reproduce
+- **Plan first.** I committed the selection rules and the analysis plan in
+  [`PREREGISTRATION.md`](PREREGISTRATION.md) before downloading any data. Every later change
+  is dated in [`DEVIATIONS.md`](DEVIATIONS.md), with whether I had seen prices at the time.
+- **Boundaries.** Councils don't publish catchment boundaries, so I rebuilt them from each
+  council's "last distance offered" figures, only for schools that admit on straight-line
+  distance. For those schools the line is a circle and the rule is mechanical.
+- **Schools.** Of 914 London secondary school records, 88 passed the type, faith and quality
+  rules, and twelve passed the rest. I re-checked 80 cut-off figures against their sources
+  ([`VERIFY.md`](VERIFY.md)), then locked the set before examining a single price. The lock is
+  commit `e02187a`; `DEVIATIONS.md` explains why that hash changed.
+- **Estimate.** 62,196 sales from 2015 to 2025 within 400 m of the twelve lines, with a
+  straight-line fit on each side and allowances for property type, quarter and boundary.
+  Distances are in British National Grid metres, and code that receives degrees raises an error.
+- **Uncertainty.** Twelve boundaries are too few for ordinary clustered p-values, so I also
+  report a wild cluster bootstrap. Clustered p = 0.47, bootstrap p = 0.66.
+
+## Trying to break it
+
+I ran every pre-registered check, including the ones that came out awkwardly. Most hold. Fake
+lines 250 and 500 m either side of the real one show nothing. Sales don't bunch just inside
+the line (McCrary test p = 0.46). Dropping sales within 25 or 50 m of the line leaves the
+estimate in place.
+
+Three don't hold:
+
+- Inside the line there are 5.2 percentage points fewer flats (p = 0.03), so the two sides are
+  not quite alike.
+- Measuring each sale against the cut-off published just before it, instead of the median,
+  gives −2.3% (p = 0.05).
+- One school carries much of the positive estimate. Coombe Girls' School in New Malden shows
+  +27.8% on its own. Without it, the pooled estimate is −0.4% (−2.6% to +1.8%).
+
+## What surprised me
+
+Coombe Girls'. Its northern arc passes Coombe Hill, one of London's most expensive enclaves,
+where prices change by hundreds of thousands of pounds within a few streets for reasons that
+have nothing to do with a school. None of my pre-registered balance checks could see that.
+Comparing sales only within the same 45° arc of each circle cuts Coombe's jump to +11.1% and
+moves the pooled estimate to +2.9% (+0.3% to +5.7%). I wrote that analysis after seeing the
+results, so it stays exploratory, and the pre-registered number stays the headline.
+
+I think my estimate is nearer a floor than a ceiling, because two known problems push it
+toward zero. Sale locations are postcode centroids of about
+fifteen addresses, so some sales near every line sit on the wrong side of it (3.3% of the
+sample lies within 25 m). And several schools measure to a named gate, while I drew circles
+from the school's registered coordinate. Both blur the line and flatten a jump.
+
+## What went wrong along the way
+
+- I caught two wrong Ofsted records, one duplicated council table and one wrong search
+  summary in the sources. Each is documented in the code or in `VERIFY.md`.
+- Ofsted grades were harder than they looked. The grade in force has to follow a school
+  across academy conversions, and through the end of single-word judgements in September 2024
+  and the report cards of November 2025.
+- I later rewrote commit messages, which changed every recorded commit hash. The lock was
+  originally `f123bcc`. `DEVIATIONS.md` (2026-11-12) maps old hashes to new.
+
+## Limits
+
+- Twelve schools that admit on distance, are rated above their neighbours and are mostly in
+  outer boroughs. Banded, faith and selective schools, common in inner London, are excluded
+  by design.
+- It prices eligibility for a school parents rate, not the quality of its teaching, and it
+  follows no pupil.
+- Being inside the line raises the odds of a place. Siblings and moving cut-offs mean it does
+  not secure one.
+
+## Run it
 
 Python 3.12, from the repository root:
 
@@ -57,63 +120,34 @@ python -m unittest discover -s tests -t .     # 45 tests, synthetic data only
 python -m pipeline.run                        # downloads (~2.4 GB) through to the writeup
 ```
 
-`pipeline.run` stops at phase 06 until `catchments/selection_lock.json`
-exists. That is deliberate (pre-registration section 9). After verifying:
+`pipeline.run` stops at phase 06 until `catchments/selection_lock.json` exists, on purpose
+(pre-registration section 9). After verifying the boundaries:
 
 ```
 python -m pipeline.lock_selection --verified-by "Your Name"
 python -m pipeline.run --from 06
 ```
 
-Every phase writes an artefact to disk. Nothing depends on notebook state.
-
-| Phase | Module | Writes |
-|---|---|---|
-| 01 | `p01_download` | `data/raw/*`, `MANIFEST.json` with SHA-256 per file |
-| 02 | `p02_ingest_sales` | `sales.parquet`, price-free `sale_locations.parquet`, ingest step table |
-| 03 | `p03_ingest_schools` | schools, Ofsted grade history, C1–C3 screen |
-| 04 | `p04_build_catchments` | `catchments.gpkg` (EPSG:27700), boundary and provenance tables |
-| 05 | `p05_screen` | C2/C4/C5 selection table, `boundary_check_map.html` |
-| 06 | `p06_assemble_sample` | `rdd_sample.parquet` + hash, full sample construction table |
-| 07 | `p07_estimate` | `outputs/results/main.json`, bandwidth sweep, per-boundary estimates |
-| 08 | `p08_robustness` | `outputs/results/robustness.csv` (R1–R12) |
-| 09 | `p09_figures` | headline chart, bandwidth plot, forest plot, density histogram (PNG) |
-| 10 | `p10_writeup` | `docs/index.html` (the GitHub Pages site), charts as inline SVG generated from the stored results |
-
-## Repository map
+Each of the ten phases in `pipeline/` writes its output to disk, so nothing depends on notebook
+state. Phase 07 writes `outputs/results/main.json`, phase 08 the table of checks and phase 10
+the write-up in `docs/index.html`.
 
 ```
 PREREGISTRATION.md   selection rules and analysis plan, committed first
-DEVIATIONS.md        every change to the plan, dated, with whether prices had been seen
+DEVIATIONS.md        every change to the plan, dated
 VERIFY.md            how the catchment research was checked before locking
-docs/                the deliverable: one page, one number, full appendix (served by GitHub Pages)
-catchments/          provenance.csv (school-year cut-offs), research_log.csv (all 88 candidates)
-line54/              library: geometry, RD estimator, density test, grades, robustness, figures
+docs/                the write-up (served by GitHub Pages)
+catchments/          provenance.csv (cut-offs by school and year), research_log.csv (all 88 candidates)
+line54/              geometry, RD estimator, density test, grades, robustness, figures
 pipeline/            one script per phase
-tests/               unittest suite; synthetic data with a planted discontinuity
+tests/               unittest suite on synthetic data with a planted discontinuity
 outputs/             tables, figures, results (data/ is not committed)
 ```
 
-## Things this project is careful about
-
-- **Coordinate system.** Distances are computed in British National Grid
-  metres. Code that receives degrees raises an error.
-- **Blinding.** School screening reads a file with no price column, and
-  estimation refuses to run until a person locks the verified boundary set.
-- **Few clusters.** 10–25 boundaries is too few for conventional
-  cluster-robust p-values. A wild cluster restricted bootstrap (Webb weights)
-  is reported alongside them.
-- **Ofsted.** The grade in force follows a school across academy
-  conversions. It uses publication dates, and stays in force through the
-  September 2024 end of single-word judgements and the November 2025 report
-  cards.
-- **Source errors.** Two Ofsted records, one duplicated council table and one
-  wrong search summary were caught and are documented in code or `VERIFY.md`.
-
 ## Licences
 
-The code and the writing in this repository are released under the MIT
-licence (`LICENSE`). Data and derived outputs keep their original licences:
+The code and the writing are released under the MIT licence ([`LICENSE`](LICENSE)). Data and
+derived outputs keep their original licences:
 
 - Contains HM Land Registry data © Crown copyright and database right 2021.
   This data is licensed under the Open Government Licence v3.0.
