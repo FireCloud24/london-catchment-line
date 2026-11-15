@@ -188,3 +188,9 @@ before the boundary set was fixed. Earlier entries in this file are left as
 written.
 
 **Prices examined?** Not applicable. No analysis was run or changed.
+
+## 2026-11-15: wording fix in the writeup (no analysis change)
+
+Appendix A6 said "Eight selected schools changed grade". The table under it, and the
+robustness summary ("7 changes"), list seven. The sentence now takes the count from the
+results instead of fixed text. Prices had been seen; no number or estimate changed.

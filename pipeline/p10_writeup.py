@@ -327,6 +327,7 @@ def main() -> None:
 
     # A6: timing and leave-one-out
     timing = rob[rob.test == "R5 timing"].dropna(subset=["tau"])
+    n_grade_changes = timing.spec.str.extract(r"URN (\d+)")[0].nunique()
     a6t = []
     for r in timing.itertuples():
         m = re.match(r"URN (\d+): grade (\d) -> (\d) published (\S+), (\w+)", r.spec)
@@ -580,7 +581,7 @@ test is for a jump at zero, not a slope. McCrary log-density difference {rob[(ro
 
 <h3>A6 · Grade changes and leave-one-out</h3>
 <p class="note col">If buyers price the school rather than the line, the premium at a boundary should move when the school's Ofsted
-grade changes. Eight selected schools changed grade with at least two years of sales on either side. No consistent pattern appears, and the
+grade changes. Of the selected schools, {n_grade_changes} changed grade with at least two years of sales on either side. No consistent pattern appears, and the
 per-school intervals are wide.</p>
 <div class="table-wrap"><table>
 <thead><tr><th>School</th><th>Grade change</th><th class="n">Published</th><th>Sales</th><th class="n">Estimate</th><th class="n">95% interval</th><th class="n">Sales</th></tr></thead>
